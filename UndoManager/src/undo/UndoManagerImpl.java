@@ -63,3 +63,7 @@ public class UndoManagerImpl implements UndoManager {
 		System.out.println("------------------");
 	}
 }
+
+//ornegin "Hello" "world" "foo" yazdik, iki kere undo yaptik "Hello" kaldi sadece. redo yapmadan "bar" ekledik bu, "Hello" "bar" olur artik bufferde "world" ve "foo" nun silinmesi gerekir ve pointer tekrar basa gecer
+//once en bastan pointere kadar olanlari siliyorsun, sonra ekliyorsun
+
