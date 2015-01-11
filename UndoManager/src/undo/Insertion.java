@@ -29,5 +29,10 @@ public class Insertion implements Change {
 		doc.delete(pos, s);
 		doc.setDot(this.oldDot);
 	}
+	
+	@Override
+	public String toString() {
+		return this.getType() + " " + s;
+	}
 
 }

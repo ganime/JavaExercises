@@ -28,7 +28,7 @@ public class DocumentImpl implements Document {
 	}
 	
 	public void print() {
-		System.out.println(content.toString());
+		System.out.println("Document:" + content.toString());
 	}
 
 }

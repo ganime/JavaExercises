@@ -27,6 +27,7 @@ public class UndoManagerImpl implements UndoManager {
 		}
 		this.canUndo = true;
 		this.canRedo = false;
+		printStack();
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class UndoManagerImpl implements UndoManager {
 	@Override
 	public void undo() {
 		if(!canUndo) 
-			return;
+			throw new IllegalStateException();
 		if(listIterator.hasPrevious()) {
 			Change latestChange = listIterator.previous();
 			latestChange.revert(doc);
@@ -53,11 +54,20 @@ public class UndoManagerImpl implements UndoManager {
 	@Override
 	public void redo() {
 		if(!canRedo())
-			return;
+			throw new IllegalStateException();
 		if(listIterator.hasNext()) {
 			Change latestChange = listIterator.next();
 			latestChange.apply(doc);
 		}
 	}
 
+	public void printStack() {
+		System.out.println("------------------");
+		System.out.println("UndoRedoBuffer:");
+		ListIterator<Change> iterator = undoRedoBuffer.listIterator(undoRedoBuffer.size());
+		while (iterator.hasPrevious()) {
+			System.out.println(iterator.previous().toString());
+		}
+		System.out.println("------------------");
+	}
 }

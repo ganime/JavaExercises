@@ -9,8 +9,7 @@ public class ChangeFactoryImpl implements ChangeFactory {
 
 	@Override
 	public Change createDeletion(int pos, String s, int oldDot, int newDot) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Deletion(pos, s, oldDot, newDot);
 	}
 
 }

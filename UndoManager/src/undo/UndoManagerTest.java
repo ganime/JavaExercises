@@ -41,12 +41,24 @@ public class UndoManagerTest {
 		insertion4.apply(doc);
 		doc.print();
 
-		undoManager.redo();
-		doc.print();
+//		undoManager.redo();
+//		doc.print();
 
 		undoManager.undo();
 		doc.print();
 		
+		undoManager.redo();
+		doc.print();
+
+		//test delete
+		Change deletion1 = changeFactory.createDeletion(0, "Hello", 0, 0);
+		undoManager.registerChange(deletion1);
+		deletion1.apply(doc);
+		doc.print();
+
+		undoManager.undo();
+		doc.print();
+
 		undoManager.redo();
 		doc.print();
 	}
