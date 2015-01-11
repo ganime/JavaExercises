@@ -1,0 +1,11 @@
+package undo;
+
+public class UndoManagerFactoryImpl implements UndoManagerFactory {
+
+	@Override
+	public UndoManager createUndoManager(Document doc, int bufferSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

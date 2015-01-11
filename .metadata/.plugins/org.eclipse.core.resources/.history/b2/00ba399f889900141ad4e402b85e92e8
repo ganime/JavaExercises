@@ -1,0 +1,17 @@
+package undo;
+
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Document doc = new DocumentImpl();
+		doc.insert(0, "First word");
+		doc.insert(10, " Second word");
+
+		UndoManagerFactory undoManagerFactory = new UndoManagerFactoryImpl();
+		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 10);
+		undoManager.undo();
+}
+}

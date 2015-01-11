@@ -1,0 +1,61 @@
+package undo;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Stack;
+
+public class UndoManagerImpl implements UndoManager {
+
+	LinkedList<Change> undoRedoStack = new LinkedList<Change>();
+	ListIterator<Change> listIterator = undoRedoStack.listIterator();
+	private int stackSize;
+	private Document doc;
+	private boolean canUndo = false;
+	private boolean canRedo = false;
+	
+	public UndoManagerImpl (Document doc, int bufferSize){
+		this.stackSize = bufferSize;
+		this.doc = doc;
+	}
+
+	@Override
+	public void registerChange(Change change) {
+		if (undoRedoStack.size() == stackSize) {
+			undoRedoStack.set(0,change);	
+		}
+		else {
+			listIterator.add(change);
+		}
+		this.canUndo = true;
+		this.canRedo = false;
+	}
+
+	@Override
+	public boolean canUndo() {
+		return true;
+	}
+
+	@Override
+	public void undo() {
+		if(listIterator.hasPrevious()) {
+			Change latestChange = listIterator.previous();
+			latestChange.revert(doc);
+		}
+	}
+
+	@Override
+	public boolean canRedo() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void redo() {
+		if(listIterator.hasNext()) {
+			Change latestChange = listIterator.next();
+			latestChange.apply(doc);
+		}
+	}
+
+}

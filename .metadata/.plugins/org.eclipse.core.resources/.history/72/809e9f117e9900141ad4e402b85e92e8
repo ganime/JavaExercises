@@ -1,0 +1,6 @@
+package undo;
+
+public enum ChangeType {
+	INSERTION,
+	DELETION;
+}

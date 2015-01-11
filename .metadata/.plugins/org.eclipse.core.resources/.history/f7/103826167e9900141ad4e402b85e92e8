@@ -1,0 +1,23 @@
+package undo;
+
+public class TextChange implements Change {
+
+	String type;
+	@Override
+	public String getType() {
+		return type:
+	}
+
+	@Override
+	public void apply(Document doc) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void revert(Document doc) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,22 @@
+package undo;
+
+public class Insertion implements Change {
+
+	@Override
+	public String getType() {
+		return "Insert";
+	}
+
+	@Override
+	public void apply(Document doc) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void revert(Document doc) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

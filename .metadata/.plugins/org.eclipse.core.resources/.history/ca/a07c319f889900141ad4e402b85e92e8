@@ -1,0 +1,33 @@
+package undo;
+
+public class Insertion implements Change {
+	private int pos;
+	private String s;
+	private int oldDot;
+	private int newDot;
+		
+	public Insertion (int pos, String s, int oldDot, int newDot) {
+		this.pos = pos;
+		this.s = s;
+		this.oldDot = oldDot;
+		this.newDot = newDot;	
+	}
+	
+	@Override
+	public String getType() {
+		return "Insert";
+	}
+
+	@Override
+	public void apply(Document doc) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void revert(Document doc) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

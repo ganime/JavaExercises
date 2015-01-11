@@ -1,0 +1,40 @@
+package undo;
+
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		DocumentImpl doc = new DocumentImpl();
+
+		UndoManagerFactory undoManagerFactory = new UndoManagerFactoryImpl();
+		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 10);
+
+		ChangeFactory changeFactory = new ChangeFactoryImpl();
+		Change insertion1 = changeFactory.createInsertion(0, "Hello, ", 0, "Hello".length());
+		undoManager.registerChange(insertion1);
+		insertion1.apply(doc);
+		doc.print();
+
+		Change insertion2 = changeFactory.createInsertion(5, ",", 0, ",".length());
+		undoManager.registerChange(insertion2);
+		insertion2.apply(doc);
+		doc.print();
+
+		Change insertion3 = changeFactory.createInsertion(0, "world", 0, "world".length());
+		undoManager.registerChange(insertion3);
+		insertion3.apply(doc);
+		doc.print();
+
+		
+		undoManager.undo();
+		doc.print();
+		
+		undoManager.undo();
+		doc.print();
+		
+		undoManager.undo();
+		doc.print();
+}
+}
