@@ -1,12 +1,10 @@
 package undo;
 
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 public class UndoManagerImpl implements UndoManager {
 
 	LinkedList<Change> undoRedoBuffer = new LinkedList<Change>();
-	ListIterator<Change> listIterator = undoRedoBuffer.listIterator();
 	private int bufferSize;
 	private Document doc;
 	private boolean canUndo = false;
