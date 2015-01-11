@@ -61,5 +61,9 @@ public class UndoManagerTest {
 
 		undoManager.redo();
 		doc.print();
+		
+		undoManager.undo();
+		doc.print();
+		
 	}
 }

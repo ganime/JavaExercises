@@ -11,6 +11,7 @@ public class UndoManagerImpl implements UndoManager {
 	private Document doc;
 	private boolean canUndo = false;
 	private boolean canRedo = false;
+	int pointer = 0;
 	
 	public UndoManagerImpl (Document doc, int bufferSize){
 		this.bufferSize = bufferSize;
@@ -20,11 +21,13 @@ public class UndoManagerImpl implements UndoManager {
 	@Override
 	public void registerChange(Change change) {
 		if (undoRedoBuffer.size() == bufferSize) {
-			undoRedoBuffer.set(0,change);	
+			undoRedoBuffer.removeLast();
 		}
-		else {
-			listIterator.add(change);
-		}
+		//always add to the top of the list
+		undoRedoBuffer.add(0, change);
+		//last change is always at the top of the list
+		pointer = 0;
+		
 		this.canUndo = true;
 		this.canRedo = false;
 		printStack();
@@ -38,12 +41,11 @@ public class UndoManagerImpl implements UndoManager {
 	@Override
 	public void undo() {
 		if(!canUndo) 
-			throw new IllegalStateException();
-		if(listIterator.hasPrevious()) {
-			Change latestChange = listIterator.previous();
-			latestChange.revert(doc);
-			this.canRedo = true;
-		}
+			throw new IllegalStateException();		
+		Change latestChange = undoRedoBuffer.get(pointer);
+		latestChange.revert(doc);
+		pointer++;
+		this.canRedo = true;
 	}
 
 	@Override
@@ -55,18 +57,15 @@ public class UndoManagerImpl implements UndoManager {
 	public void redo() {
 		if(!canRedo())
 			throw new IllegalStateException();
-		if(listIterator.hasNext()) {
-			Change latestChange = listIterator.next();
-			latestChange.apply(doc);
-		}
+		Change latestChange = undoRedoBuffer.get(--pointer);
+		latestChange.apply(doc);
 	}
 
 	public void printStack() {
 		System.out.println("------------------");
 		System.out.println("UndoRedoBuffer:");
-		ListIterator<Change> iterator = undoRedoBuffer.listIterator(undoRedoBuffer.size());
-		while (iterator.hasPrevious()) {
-			System.out.println(iterator.previous().toString());
+		for (Change  change : undoRedoBuffer) {
+			System.out.println(change.toString());
 		}
 		System.out.println("------------------");
 	}
