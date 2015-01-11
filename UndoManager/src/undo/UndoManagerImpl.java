@@ -7,8 +7,6 @@ public class UndoManagerImpl implements UndoManager {
 	LinkedList<Change> undoRedoBuffer = new LinkedList<Change>();
 	private int bufferSize;
 	private Document doc;
-	private boolean canUndo = false;
-	private boolean canRedo = false;
 	int pointer = 0;
 	
 	public UndoManagerImpl (Document doc, int bufferSize){
@@ -22,39 +20,36 @@ public class UndoManagerImpl implements UndoManager {
 			undoRedoBuffer.removeLast();
 		}
 		//always add to the top of the list
-		undoRedoBuffer.add(0, change);
+		undoRedoBuffer.addFirst(change);
 		//last change is always at the top of the list
 		pointer = 0;
 		
-		this.canUndo = true;
-		this.canRedo = false;
 		printStack();
 	}
 
 	@Override
 	public boolean canUndo() {
-		return this.canUndo();
+		return (pointer < bufferSize);
 	}
 
 	@Override
 	public void undo() {
-		if(!canUndo) 
-			throw new IllegalStateException();		
+		if(!canUndo()) 
+			throw new IllegalStateException("Undo not posibble");		
 		Change latestChange = undoRedoBuffer.get(pointer);
 		latestChange.revert(doc);
 		pointer++;
-		this.canRedo = true;
 	}
 
 	@Override
 	public boolean canRedo() {
-		return this.canRedo;
+		return (pointer > 0);
 	}
 
 	@Override
 	public void redo() {
 		if(!canRedo())
-			throw new IllegalStateException();
+			throw new IllegalStateException("Redo not possible");
 		Change latestChange = undoRedoBuffer.get(--pointer);
 		latestChange.apply(doc);
 	}
