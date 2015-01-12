@@ -47,4 +47,19 @@ public interface UndoManager {
 	 */
 	public void redo();
 	
+	/**
+	 * Max capacity of the undoRedoBuffer
+	 */ 
+	public int bufferCapacity();
+
+	
+	/**
+	 * No of changes currently in the undoRedoBuffer
+	 */ 
+	public int bufferSize();
+	
+	/** 
+	 * Current change to undo/redo
+	 */
+	public Change currentChange();
 }

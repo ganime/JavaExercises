@@ -9,3 +9,12 @@
 1421001187641	Delete element
 1421001214706	Rename type 'Main'
 1421005965116	Delete element
+1421059355949	Rename field 'bufferSize'
+1421065076460	Rename field 't1'
+1421065083996	Rename field 't2'
+1421065096532	Rename field 't3'
+1421065104065	Rename field 't4'
+1421065112097	Rename field 't5'
+1421065151435	Rename package 'undo.tests'
+1421065170731	Move compilation unit
+1421065198093	Rename type 'UndoManagerUnitTests'

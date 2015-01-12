@@ -3,6 +3,10 @@ package undo;
 /**
  * An abstraction of a document to be used with the {@link UndoManager}.
  */
+/**
+ * @author ganime
+ *
+ */
 public interface Document {
 
 	/**
@@ -33,4 +37,9 @@ public interface Document {
 	 * 			(that is, if document is shorter than that). 
 	 */
 	public void setDot(int pos);
+	
+	/**
+	 * Returns the contents. 
+	 */
+	public String getContent();
 }

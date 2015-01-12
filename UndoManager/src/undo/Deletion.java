@@ -31,7 +31,7 @@ public class Deletion implements Change {
 
 	@Override
 	public String toString() {
-		return this.getType() + " " + s;
+		return this.getType() + ": \"" + s + "\"";
 	}
 
 }

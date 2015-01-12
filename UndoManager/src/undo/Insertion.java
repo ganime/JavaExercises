@@ -32,7 +32,7 @@ public class Insertion implements Change {
 	
 	@Override
 	public String toString() {
-		return this.getType() + " " + s;
+		return this.getType() + ": \"" + s + "\"";
 	}
 
 }

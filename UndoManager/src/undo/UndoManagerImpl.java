@@ -5,31 +5,50 @@ import java.util.LinkedList;
 public class UndoManagerImpl implements UndoManager {
 
 	LinkedList<Change> undoRedoBuffer = new LinkedList<Change>();
-	private int bufferSize;
+	private int bufferCapacity;
+
 	private Document doc;
 	int pointer = 0;
 	
 	public UndoManagerImpl (Document doc, int bufferSize){
-		this.bufferSize = bufferSize;
+		this.bufferCapacity = bufferSize;
 		this.doc = doc;
 	}
 
 	@Override
+	public int bufferCapacity() {
+		return bufferCapacity;
+	}
+
+	@Override
+	public int bufferSize() {
+		return undoRedoBuffer.size();
+	}
+
+	@Override
 	public void registerChange(Change change) {
-		if (undoRedoBuffer.size() == bufferSize) {
+		// If we have made undo - redo operations before, we flush the buffer
+		// until the
+		// currentChange (This will save changes older than currentChange)
+		if (pointer > 0) {
+			for (int i = 0; i < pointer; i++) {
+				undoRedoBuffer.removeFirst();
+			}
+			// After each add operation, pointer reset to zero (moved to first
+			// item of list)
+			pointer = 0;
+		}
+		// If we are at the limit of the buffer, discard one change from end.
+		if (undoRedoBuffer.size() == bufferCapacity) {
 			undoRedoBuffer.removeLast();
 		}
-		//always add to the top of the list
+		// always add to the top of the list
 		undoRedoBuffer.addFirst(change);
-		//last change is always at the top of the list
-		pointer = 0;
-		
-		printStack();
 	}
 
 	@Override
 	public boolean canUndo() {
-		return (pointer < bufferSize);
+		return (pointer < bufferSize());
 	}
 
 	@Override
@@ -54,16 +73,24 @@ public class UndoManagerImpl implements UndoManager {
 		latestChange.apply(doc);
 	}
 
-	public void printStack() {
-		System.out.println("------------------");
-		System.out.println("UndoRedoBuffer:");
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("------------------\n");
+		sb.append("UndoRedoBuffer:\n");
+		sb.append("\n");
 		for (Change  change : undoRedoBuffer) {
-			System.out.println(change.toString());
+			sb.append(change.toString() );
+			sb.append("\n");
 		}
-		System.out.println("------------------");
+		sb.append("------------------");
+		return sb.toString();
+	}
+
+	@Override
+	public Change currentChange() {
+		if (pointer < bufferSize())
+			return undoRedoBuffer.get(pointer);
+		return null;
 	}
 }
-
-//ornegin "Hello" "world" "foo" yazdik, iki kere undo yaptik "Hello" kaldi sadece. redo yapmadan "bar" ekledik bu, "Hello" "bar" olur artik bufferde "world" ve "foo" nun silinmesi gerekir ve pointer tekrar basa gecer
-//once en bastan pointere kadar olanlari siliyorsun, sonra ekliyorsun
-

@@ -27,8 +27,9 @@ public class DocumentImpl implements Document {
 		this.dot = pos;
 	}
 	
-	public void print() {
-		System.out.println("Document:" + content.toString());
+	@Override
+	public String getContent() {
+		return(content.toString());
 	}
 
 }
