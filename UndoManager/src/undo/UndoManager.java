@@ -26,9 +26,9 @@ public interface UndoManager {
 	 * Performs the undo operation of the current change.
 	 * 
 	 * @throws IllegalStateException
-	 *             If the manager is in a state that does not allow an undo
-	 *             (that is if either {@link #canUndo()} would have returned
-	 *             <code>false</code>, or the application of the change failed).
+	 * If the manager is in a state that does not allow an undo
+	 * (that is if either {@link #canUndo()} would have returned
+	 * <code>false</code>, or the application of the change failed).
 	 */
 	public void undo();
 

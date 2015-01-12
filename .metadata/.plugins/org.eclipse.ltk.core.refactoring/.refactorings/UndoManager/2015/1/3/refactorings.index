@@ -18,3 +18,12 @@
 1421065151435	Rename package 'undo.tests'
 1421065170731	Move compilation unit
 1421065198093	Rename type 'UndoManagerUnitTests'
+1421081685030	Rename package 'undo.test'
+1421081702657	Delete element
+1421081738425	Rename type 'UndoManagerTest'
+1421082724045	Rename field 'c1'
+1421082732028	Rename field 'c2'
+1421082747654	Rename field 'c3'
+1421082754707	Rename field 'c4'
+1421082765786	Rename field 'c5'
+1421082782020	Rename field 'd5'

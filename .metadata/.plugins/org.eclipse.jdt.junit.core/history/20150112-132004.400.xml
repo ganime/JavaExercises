@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="UndoManagerUnitTests" project="UndoManager" tests="8" started="8" failures="0" errors="0" ignored="0">
+  <testsuite name="undo.test.UndoManagerTest" time="0.0">
+    <testcase name="testBufferCreation" classname="undo.test.UndoManagerTest" time="0.0"/>
+    <testcase name="testBufferAdd" classname="undo.test.UndoManagerTest" time="0.0"/>
+    <testcase name="testInsertion" classname="undo.test.UndoManagerTest" time="0.0"/>
+    <testcase name="testUndoSingleItem" classname="undo.test.UndoManagerTest" time="0.0"/>
+    <testcase name="testUndoMultipleItems" classname="undo.test.UndoManagerTest" time="0.0"/>
+    <testcase name="testRedoSingleItem" classname="undo.test.UndoManagerTest" time="0.0"/>
+    <testcase name="testUndoRedoMultipleTimes" classname="undo.test.UndoManagerTest" time="0.0"/>
+    <testcase name="testAddAfterUndoRedo" classname="undo.test.UndoManagerTest" time="0.0"/>
+  </testsuite>
+</testrun>
