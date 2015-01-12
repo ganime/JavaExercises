@@ -9,8 +9,8 @@ public class UndoManagerImpl implements UndoManager {
 
 	private Document doc;
 	int pointer = 0;
-	
-	public UndoManagerImpl (Document doc, int bufferSize){
+
+	public UndoManagerImpl(Document doc, int bufferSize) {
 		this.bufferCapacity = bufferSize;
 		this.doc = doc;
 	}
@@ -53,8 +53,8 @@ public class UndoManagerImpl implements UndoManager {
 
 	@Override
 	public void undo() {
-		if(!canUndo()) 
-			throw new IllegalStateException("Undo not posibble");		
+		if (!canUndo())
+			throw new IllegalStateException("Undo not posibble");
 		Change latestChange = undoRedoBuffer.get(pointer);
 		latestChange.revert(doc);
 		pointer++;
@@ -67,7 +67,7 @@ public class UndoManagerImpl implements UndoManager {
 
 	@Override
 	public void redo() {
-		if(!canRedo())
+		if (!canRedo())
 			throw new IllegalStateException("Redo not possible");
 		Change latestChange = undoRedoBuffer.get(--pointer);
 		latestChange.apply(doc);
@@ -79,8 +79,8 @@ public class UndoManagerImpl implements UndoManager {
 		sb.append("------------------\n");
 		sb.append("UndoRedoBuffer:\n");
 		sb.append("\n");
-		for (Change  change : undoRedoBuffer) {
-			sb.append(change.toString() );
+		for (Change change : undoRedoBuffer) {
+			sb.append(change.toString());
 			sb.append("\n");
 		}
 		sb.append("------------------");
