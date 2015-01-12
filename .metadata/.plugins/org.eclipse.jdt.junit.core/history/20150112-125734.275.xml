@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="UndoManagerUnitTests" project="UndoManager" tests="8" started="8" failures="1" errors="0" ignored="0">
+  <testsuite name="undo.UndoManagerUnitTests" time="0.032">
+    <testcase name="testInsertion" classname="undo.UndoManagerUnitTests" time="0.013">
+      <failure>
+        <expected>undo.DocumentImpl@58663731</expected>
+        <actual>Hello</actual>junit.framework.ComparisonFailure: null expected:&lt;[undo.DocumentImpl@58663731]&gt; but was:&lt;[Hello]&gt;
+	at junit.framework.Assert.assertEquals(Assert.java:81)
+	at junit.framework.Assert.assertEquals(Assert.java:87)
+	at undo.UndoManagerUnitTests.testInsertion(UndoManagerUnitTests.java:61)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:622)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at junit.framework.TestSuite.runTest(TestSuite.java:243)
+	at junit.framework.TestSuite.run(TestSuite.java:238)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+
+</failure>
+    </testcase>
+    <testcase name="testUndoSingleItem" classname="undo.UndoManagerUnitTests" time="0.002"/>
+    <testcase name="testUndoMultipleItems" classname="undo.UndoManagerUnitTests" time="0.002"/>
+    <testcase name="testRedoSingleItem" classname="undo.UndoManagerUnitTests" time="0.001"/>
+    <testcase name="testUndoRedoMultipleTimes" classname="undo.UndoManagerUnitTests" time="0.003"/>
+    <testcase name="testAddAfterUndoRedo" classname="undo.UndoManagerUnitTests" time="0.004"/>
+    <testcase name="testBufferCreation" classname="undo.UndoManagerUnitTests" time="0.001"/>
+    <testcase name="testBufferAdd" classname="undo.UndoManagerUnitTests" time="0.005"/>
+  </testsuite>
+</testrun>

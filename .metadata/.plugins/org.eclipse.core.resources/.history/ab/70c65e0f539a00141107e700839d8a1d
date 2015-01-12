@@ -1,0 +1,192 @@
+package undo;
+
+import static org.junit.Assert.*;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
+import org.junit.Test;
+
+public class UndoManagerUnitTests extends TestCase{
+    Change t1;
+    Change t2;
+    Change t3;
+    Change t4;
+    Change t5;
+
+    UndoManagerFactory undoManagerFactory;
+    DocumentImpl doc;
+    
+    @Override
+    public void setUp() {
+		undoManagerFactory = new UndoManagerFactoryImpl();
+		
+		ChangeFactory changeFactory = new ChangeFactoryImpl();
+		t1 = changeFactory.createInsertion(0, "Hello", 0, "Hello".length());
+		t2 = changeFactory.createInsertion(5, ",", 0, ",".length());
+		t3 = changeFactory.createInsertion(6, "world", 0, "world".length());
+		t4 = changeFactory.createDeletion(0, "Hello", 0, 0);
+   }
+
+    @Test
+    public void testBufferCreation() {
+		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+
+        assertEquals(3, undoManager.bufferCapacity());
+        assertEquals(0, undoManager.bufferSize());
+    }
+   
+    @Test
+    public void testBufferAdd() {
+    	Document doc = new DocumentImpl();
+		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+		undoManager.registerChange(t1);
+        assertEquals(1, undoManager.bufferSize());
+
+		undoManager.registerChange(t2);
+        assertEquals(2, undoManager.bufferSize());
+
+		undoManager.registerChange(t3);
+        assertEquals(3, undoManager.bufferSize());
+        
+		undoManager.registerChange(t4);
+        assertEquals(3, undoManager.bufferSize());
+   }
+
+    @Test
+    public void testInsertion() {
+    	Document doc = new DocumentImpl();
+		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+		undoManager.registerChange(t1);
+		t1.apply(doc);
+        assertEquals(doc.getContent(), "Hello");
+
+		undoManager.registerChange(t2);
+		t2.apply(doc);
+        assertEquals(doc.getContent(), "Hello,");
+
+    	undoManager.registerChange(t3);
+		t3.apply(doc);
+        assertEquals(doc.getContent(), "Hello,world");
+   }
+
+    @Test
+    public void testUndoSingleItem() {
+    	Document doc = new DocumentImpl();
+		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+		undoManager.registerChange(t1);
+		t1.apply(doc);
+		
+		Change u1 = undoManager.currentChange();
+		assertEquals(t1, u1);
+		undoManager.undo();
+
+        Change u2 = undoManager.currentChange();
+        Assert.assertNull(u2);
+}
+
+   
+	    @Test
+	    public void testUndoMultipleItems() {
+	    	Document doc = new DocumentImpl();
+			UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+			undoManager.registerChange(t1);
+			t1.apply(doc);
+
+			undoManager.registerChange(t2);
+			t2.apply(doc);
+
+			Change u2 = undoManager.currentChange();
+			assertEquals(t2, u2);
+			undoManager.undo();
+
+			Change u1= undoManager.currentChange();
+			assertEquals(t1, u1);
+			undoManager.undo();
+
+	        Change u3 = undoManager.currentChange();
+	        Assert.assertNull(u3);
+	    }
+
+	    @Test
+	    public void testRedoSingleItem() {
+	    	Document doc = new DocumentImpl();
+			UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+			undoManager.registerChange(t1);
+			t1.apply(doc);
+			
+			// Initially it should not be possible to redo.
+			assertFalse(undoManager.canRedo());
+			
+			//Undo should be possible
+			assertTrue(undoManager.canUndo());
+			
+			undoManager.undo();
+			// Redo should now be possible
+			assertTrue(undoManager.canRedo());
+			assertFalse(undoManager.canUndo());
+			
+			undoManager.redo();
+			Change r1 = undoManager.currentChange();
+			assertEquals(t1, r1);
+	    }
+
+	    @Test
+	    public void testUndoRedoMultipleTimes() {
+	    	Document doc = new DocumentImpl();
+			UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+			undoManager.registerChange(t1);
+			t1.apply(doc);
+
+			undoManager.registerChange(t2);
+			t2.apply(doc);
+
+	        // 2 undo and 2 redo done repeatedly.
+	        for (int i = 0; i < 5; i++) {
+	            // 2 Undos
+				Change u2 = undoManager.currentChange();// First undo should return last change
+				assertEquals(t2, u2);
+				undoManager.undo();
+
+				Change u1 = undoManager.currentChange();
+				assertEquals(t1, u1);
+				undoManager.undo();
+
+	            // 2 Redos
+				undoManager.redo();
+	            assertEquals(t1, undoManager.currentChange()); // First redo should return first change
+	            undoManager.redo();
+	            assertEquals(t2, undoManager.currentChange());
+	        }
+	    }
+
+	    // If an operation is made after an undo, we can not redo the prior changes.
+	    public void testAddAfterUndoRedo() {
+	    	Document doc = new DocumentImpl();
+			UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
+			undoManager.registerChange(t1);
+			undoManager.registerChange(t2);
+			undoManager.registerChange(t3);
+			
+			t1.apply(doc);
+			t2.apply(doc);
+			t3.apply(doc);
+			
+	        // 2 Undo
+	        undoManager.undo();
+	        undoManager.undo();
+	        
+	        // Now add another change
+	        undoManager.registerChange(t4);
+			
+			t4.apply(doc);
+	        // Now we should have last change C4 at the beginning and C1 (first change)
+	        // in the end and C2, C3 discarded.
+	        assertEquals(t4, undoManager.currentChange());
+	        undoManager.undo();
+	        assertEquals(t1, undoManager.currentChange());
+
+	        // Now do 1 redo
+	        undoManager.redo();
+	        assertEquals(t4, undoManager.currentChange());
+	}
+}

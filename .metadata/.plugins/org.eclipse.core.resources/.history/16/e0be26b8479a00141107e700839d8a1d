@@ -1,0 +1,81 @@
+package undo;
+
+import java.util.LinkedList;
+
+public class UndoManagerImpl implements UndoManager {
+
+	LinkedList<Change> undoRedoBuffer = new LinkedList<Change>();
+	private int bufferSize;
+	private Document doc;
+	int pointer = 0;
+	
+	public UndoManagerImpl (Document doc, int bufferSize){
+		this.bufferSize = bufferSize;
+		this.doc = doc;
+	}
+
+	@Override
+	public void registerChange(Change change) {
+		if (undoRedoBuffer.size() == bufferSize) {
+			undoRedoBuffer.removeLast();
+		}
+		// If we have made undo - redo operations before, we flush the buffer
+		// until the
+		// currentChange (This will save changes older than currentChange)
+		if (pointer > 0) {
+			for (int i = 0; i < pointer; i++) {
+				undoRedoBuffer.removeFirst();
+			}
+			// After each add operation, pointer reset to zero (moved to first
+			// item of list)
+			pointer = 0;
+		}
+		// If we are at the limit of the buffer, discard one change from end.
+		if (undoRedoBuffer.size() == bufferSize) {
+			undoRedoBuffer.removeLast();
+		}
+		// always add to the top of the list
+		undoRedoBuffer.addFirst(change);
+		printStack();
+	}
+
+	@Override
+	public boolean canUndo() {
+		return (pointer < bufferSize);
+	}
+
+	@Override
+	public void undo() {
+		if(!canUndo()) 
+			throw new IllegalStateException("Undo not posibble");		
+		Change latestChange = undoRedoBuffer.get(pointer);
+		latestChange.revert(doc);
+		pointer++;
+	}
+
+	@Override
+	public boolean canRedo() {
+		return (pointer > 0);
+	}
+
+	@Override
+	public void redo() {
+		if(!canRedo())
+			throw new IllegalStateException("Redo not possible");
+		Change latestChange = undoRedoBuffer.get(--pointer);
+		latestChange.apply(doc);
+	}
+
+	public void printStack() {
+		System.out.println("------------------");
+		System.out.println("UndoRedoBuffer:");
+		for (Change  change : undoRedoBuffer) {
+			System.out.println(change.toString());
+		}
+		System.out.println("------------------");
+	}
+}
+
+//ornegin "Hello" "world" "foo" yazdik, iki kere undo yaptik "Hello" kaldi sadece. redo yapmadan "bar" ekledik bu, "Hello" "bar" olur artik bufferde "world" ve "foo" nun silinmesi gerekir ve pointer tekrar basa gecer
+//once en bastan pointere kadar olanlari siliyorsun, sonra ekliyorsun
+//printStack yerine toString yaz.

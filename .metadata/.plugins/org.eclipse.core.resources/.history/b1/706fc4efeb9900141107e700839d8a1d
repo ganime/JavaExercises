@@ -1,0 +1,66 @@
+package undo;
+
+import java.util.LinkedList;
+
+public class UndoManagerImpl implements UndoManager {
+
+	LinkedList<Change> undoRedoBuffer = new LinkedList<Change>();
+	private int bufferSize;
+	private Document doc;
+	int pointer = 0;
+	
+	public UndoManagerImpl (Document doc, int bufferSize){
+		this.bufferSize = bufferSize;
+		this.doc = doc;
+	}
+
+	@Override
+	public void registerChange(Change change) {
+		if (undoRedoBuffer.size() == bufferSize) {
+			undoRedoBuffer.removeLast();
+		}
+		//always add to the top of the list
+		undoRedoBuffer.addFirst(change);
+		//last change is always at the top of the list
+		pointer = 0;
+		
+		printStack();
+	}
+
+	@Override
+	public boolean canUndo() {
+		return (pointer < bufferSize);
+	}
+
+	@Override
+	public void undo() {
+		if(!canUndo()) 
+			throw new IllegalStateException("Undo not posibble");		
+		Change latestChange = undoRedoBuffer.get(pointer);
+		latestChange.revert(doc);
+		pointer++;
+	}
+
+	@Override
+	public boolean canRedo() {
+		return (pointer > 0);
+	}
+
+	@Override
+	public void redo() {
+		if(!canRedo())
+			throw new IllegalStateException("Redo not possible");
+		Change latestChange = undoRedoBuffer.get(--pointer);
+		latestChange.apply(doc);
+	}
+
+	@Override
+	public void printStack() {
+		System.out.println("------------------");
+		System.out.println("UndoRedoBuffer:");
+		for (Change  change : undoRedoBuffer) {
+			System.out.println(change.toString());
+		}
+		System.out.println("------------------");
+	}
+}

@@ -1,0 +1,26 @@
+package undo;
+
+public class Deletion implements Change {
+	this.pos = pos;
+	this.s = s;
+	this.oldDot = oldDot;
+	this.newDot = newDot;	
+
+	@Override
+	public void apply(Document doc) {
+		doc.insert(pos, s);
+		doc.setDot(this.newDot);
+	}
+	
+	@Override
+	public void revert(Document doc) {
+		doc.delete(pos, s);
+		doc.setDot(this.oldDot);
+	}
+
+	@Override
+	public String getType() {
+		return "Delete";
+	}
+
+}

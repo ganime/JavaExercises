@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="UndoManagerUnitTests" project="UndoManager" tests="2" started="2" failures="0" errors="0" ignored="0">
+  <testsuite name="undo.UndoManagerUnitTests" time="0.003">
+    <testcase name="testBufferCreation" classname="undo.UndoManagerUnitTests" time="0.0"/>
+    <testcase name="testBufferAdd" classname="undo.UndoManagerUnitTests" time="0.003"/>
+  </testsuite>
+</testrun>

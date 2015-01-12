@@ -1,0 +1,292 @@
+package undo;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class UndoManagerUnitTests {
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
+
+	package undo;
+
+	import java.util.LinkedList;
+
+	public class UndoBuffer {
+	    // Changes are always pushed at the beginning of a linked list.
+	    private final LinkedList<Change> buffer;
+	    private final int capacity;
+	    // Current Change is the pointer Undo buffer uses to determine which change will be used
+	    // for undo or redo operation.
+	    int currentChange = 0;
+
+	    public UndoBuffer(int capacity) {
+	        if (capacity < 1) {
+	            throw new IllegalArgumentException("Capacity must be greater than zero: " + capacity);
+	        }
+	        buffer = new LinkedList<Change>();
+	        this.capacity = capacity;
+	        reset();
+	    }
+
+	    public void reset() {
+	        buffer.clear();
+	        currentChange = 0;
+	    }
+
+	    public void addChange(Change change) {
+	        if (change == null) {
+	            throw new IllegalArgumentException("Can not insert null to Undo Buffer.");
+	        }
+	        // If we have made undo - redo operations before, we flush the buffer until the
+	        // currentChange (This will save changes older than currentChange)
+	        if (currentChange > 0) {
+	            for (int i = 0; i < currentChange; i++) {
+	                buffer.removeFirst();
+	            }
+	            // After each add operation, currentChange reset to zero (moved to first item of list)
+	            currentChange = 0;
+	        }
+	        // If we are at the limit of the buffer, discard one change from end.
+	        if (buffer.size() == capacity) {
+	            buffer.removeLast();
+	        }
+	        // Add incoming (last) change to front of list.
+	        buffer.addFirst(change);
+	    }
+
+	    /**
+	     * Returns one change to apply a document to undo.
+	     *
+	     * @return Change to undo, or null if can not undo.
+	     */
+	    public Change getChangeToUndo() {
+	        if (canUndo()) {
+	            return buffer.get(currentChange++);
+	        } else {
+	            return null; // Maybe throw an exception?
+	        }
+	    }
+
+	    /**
+	     * Returns one change to apply a document to redo.
+	     *
+	     * @return Change to undo, or null if can not redo.
+	     */
+	    public Change getChangeToRedo() {
+	        if (canRedo()) {
+	            // Move pointer one back and return the element for redo.
+	            currentChange--;
+	            return buffer.get(currentChange);
+	        } else {
+	            return null; // Maybe throw an exception?
+	        }
+	    }
+
+	    // We can undo only if there are more items than currentItem.
+	    public boolean canUndo() {
+	        return currentChange < buffer.size();
+	    }
+
+	    // We can undo only if there are more items than currentItem.
+	    public boolean canRedo() {
+	        return currentChange > 0;
+	    }
+
+	    @Override
+	    public String toString() {
+	        StringBuilder sb = new StringBuilder();
+	        sb.append("Capacity: " + capacity + " Size: " + buffer.size() + "\n");
+	        sb.append("--------------------\n");
+	        for (int i = 0; i < capacity; i++) {
+	            if (i < buffer.size()) {
+	                sb.append(buffer.get(i));
+	            } else {
+	                sb.append("-");
+	            }
+	            // Mark the pointer.
+	            if (i == currentChange) {
+	                sb.append(" <- ");
+	            }
+	            sb.append('\n');
+	        }
+	        return sb.toString();
+	    }
+
+	    public int size() {
+	        return buffer.size();
+	    }
+
+	    public int capacity() {
+	        return capacity;
+	    }
+
+	}
+
+
+
+	// Unit test.
+	import junit.framework.Assert;
+	import junit.framework.TestCase;
+	import org.junit.Test;
+	import undo.Change;
+	import undo.Document;
+import undo.UndoBuffer;
+
+	public class UndoBufferTest extends TestCase {
+
+
+	    Change t1;
+	    Change t2;
+	    Change t3;
+	    Change t4;
+	    Change t5;
+
+	    UndoManagerFactory undoManagerFactory;
+	    DocumentImpl doc;
+	    @Override
+	    // Setup creates 3 test changes for tests.
+	    public void setUp() {
+			doc = new DocumentImpl();
+
+			undoManagerFactory = new UndoManagerFactoryImpl();
+			UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 10);
+			ChangeFactory changeFactory = new ChangeFactoryImpl();
+			t1 = changeFactory.createInsertion(0, "Hello ", 0, "Hello".length());
+			t2 = changeFactory.createInsertion(5, ",", 0, ",".length());
+			t3 = changeFactory.createInsertion(6, "world", 0, "world".length());
+    }
+
+	    @Test
+	    public void testBufferCreation() {
+			UndoManagerImpl undoManager = undoManagerFactory.createUndoManager(doc, 3);
+
+	        assertEquals(3, undoManager.getBufferCapacity());
+	        assertEquals(0, b.size());
+	        try {
+	            UndoBuffer b2 = new UndoBuffer(0);
+	            fail("Expected to have an Exception for 0 capacity buffer");
+	        } catch (IllegalArgumentException e) {
+	            // Pass
+	        } catch (Exception e) {
+	            fail("Expected an IllegalArgumentException.");
+	        }
+	    }
+
+	    @Test
+	    public void testBufferAdd() {
+	        UndoBuffer b = new UndoBuffer(3);
+	        b.addChange(t1);
+	        assertEquals(1, b.size());
+	        b.addChange(t2);
+	        assertEquals(2, b.size());
+	        b.addChange(t3);
+	        assertEquals(3, b.size());
+	        // Size should be equal to capacity now.
+	        b.addChange(t4);
+	        assertEquals(3, b.size());
+	        System.out.println(b.toString());
+	    }
+
+	    @Test
+	    public void testUndoSingleItem() {
+	        UndoBuffer b = new UndoBuffer(3);
+	        b.addChange(t1);
+	        System.out.println(b.toString());
+	        Change u1 = b.getChangeToUndo();
+	        System.out.println(b.toString());
+	        assertEquals(t1, u1);
+	        Change u2 = b.getChangeToUndo();
+	        Assert.assertNull(u2);
+	    }
+
+	    @Test
+	    public void testUndoMultipleItems() {
+	        UndoBuffer b = new UndoBuffer(3);
+	        b.addChange(t1);
+	        b.addChange(t2);
+	        System.out.println(b.toString());
+	        Change u1 = b.getChangeToUndo();
+	        assertEquals(t2, u1);
+	        Change u2 = b.getChangeToUndo();
+	        System.out.println(b.toString());
+	        assertEquals(t1, u2);
+	        // Should not be possible to undo further.
+	        Assert.assertNull(b.getChangeToUndo());
+	    }
+
+	    @Test
+	    public void testRedoSingleItem() {
+	        UndoBuffer b = new UndoBuffer(3);
+	        b.addChange(t1);
+	        // Initially it should not be possible to redo.
+	        Change r = b.getChangeToRedo();
+	        Assert.assertNull(r);
+	        // First undo.
+	        b.getChangeToUndo();
+	        r = b.getChangeToRedo();
+	        // The initial change (which was selected for undo, should be selected again for redo)
+	        // and system should be at initial state.
+	        assertEquals(t1, r);
+	        System.out.println(b.toString());
+	    }
+
+	    @Test
+	    public void testUndoRedoMultipleTimes() {
+	        UndoBuffer b = new UndoBuffer(3);
+	        b.addChange(t1);
+	        b.addChange(t2);
+	        // 2 undo and 2 redo done repeatedly.
+	        for (int i = 0; i < 5; i++) {
+	            // 2 Undo
+	            assertEquals(t2, b.getChangeToUndo()); // First undo should return last change
+	            assertEquals(t1, b.getChangeToUndo());
+
+	            // 2 Redo
+	            assertEquals(t1, b.getChangeToRedo()); // First redo should return first change
+	            assertEquals(t2, b.getChangeToRedo());
+	        }
+	    }
+
+	    // If an operation is made after an undo, we can not redo the prior changes.
+	    public void testAddAfterUndoRedo() {
+	        UndoBuffer b = new UndoBuffer(3);
+	        b.addChange(t1);
+	        b.addChange(t2);
+	        b.addChange(t3);
+
+	        // 2 Undo
+	        b.getChangeToUndo();
+	        b.getChangeToUndo();
+	        System.out.println(b);
+
+	        // Now add another change
+	        b.addChange(t4);
+	        System.out.println(b);
+	        // Now we should have last change C4 at the beginning and C1 (first change)
+	        // in the end and C2, C3 discarded.
+	        assertEquals(t4, b.getChangeToUndo());
+	        assertEquals(t1, b.getChangeToUndo());
+
+	        // Now do 1 redo
+	        assertEquals(t1, b.getChangeToRedo());
+
+	        // Now add another item, This should again discard C4 and add C5 at the beginning
+	        b.addChange(t5);
+
+	        System.out.println(b);
+	        assertEquals(t5, b.getChangeToUndo());
+	        assertEquals(t1, b.getChangeToUndo());
+	        // Now with this add there should be a single item in the stack
+	        b.addChange(t2);
+	        // And on a single item buffer redo should not be possible.
+	        assertNull(b.getChangeToRedo());
+	        assertEquals(t2, b.getChangeToUndo());
+	    }
+
+	}
+
+}
