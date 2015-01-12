@@ -23,11 +23,14 @@ public class UndoManagerTest extends TestCase {
 	Change d1;
 
 	UndoManagerFactory undoManagerFactory;
-	DocumentImpl doc;
+	UndoManager undoManager;
+	Document doc;
 
 	@Override
 	public void setUp() {
+		doc = new DocumentImpl();
 		undoManagerFactory = new UndoManagerFactoryImpl();
+		undoManager = undoManagerFactory.createUndoManager(doc, 3);
 
 		ChangeFactory changeFactory = new ChangeFactoryImpl();
 		i1 = changeFactory.createInsertion(0, "Hello", 0, "Hello".length());
@@ -38,15 +41,12 @@ public class UndoManagerTest extends TestCase {
 
 	@Test
 	public void testBufferCreation() {
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		assertEquals(3, undoManager.bufferCapacity());
 		assertEquals(0, undoManager.bufferSize());
 	}
 
 	@Test
 	public void testBufferAdd() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
 		assertEquals(1, undoManager.bufferSize());
 
@@ -62,8 +62,6 @@ public class UndoManagerTest extends TestCase {
 
 	@Test
 	public void testInsertion() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
 		i1.apply(doc);
 		assertEquals(doc.getContent(), "Hello");
@@ -81,8 +79,6 @@ public class UndoManagerTest extends TestCase {
 
 	@Test
 	public void testInsertionUndoRedo() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
 		i1.apply(doc);
 		assertEquals(doc.getContent(), "Hello");
@@ -97,7 +93,7 @@ public class UndoManagerTest extends TestCase {
 			// success
 		} catch (Exception e) {
 			fail("");
-		}		undoManager.registerChange(i1);
+		}
 		undoManager.registerChange(i2);
 		i2.apply(doc);
 		undoManager.registerChange(i3);
@@ -113,8 +109,6 @@ public class UndoManagerTest extends TestCase {
 	
 	@Test
 	public void testUndoSingleItem() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
 		i1.apply(doc);
 
@@ -128,11 +122,8 @@ public class UndoManagerTest extends TestCase {
 
 	@Test
 	public void testUndoMultipleItems() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
 		i1.apply(doc);
-
 		undoManager.registerChange(i2);
 		i2.apply(doc);
 
@@ -150,8 +141,6 @@ public class UndoManagerTest extends TestCase {
 
 	@Test
 	public void testRedoSingleItem() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
 		i1.apply(doc);
 
@@ -173,11 +162,8 @@ public class UndoManagerTest extends TestCase {
 
 	@Test
 	public void testUndoRedoMultipleTimes() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
 		i1.apply(doc);
-
 		undoManager.registerChange(i2);
 		i2.apply(doc);
 
@@ -202,14 +188,11 @@ public class UndoManagerTest extends TestCase {
 
 	// If an operation is made after an undo, we can not redo the prior changes.
 	public void testAddAfterUndoRedo() {
-		Document doc = new DocumentImpl();
-		UndoManager undoManager = undoManagerFactory.createUndoManager(doc, 3);
 		undoManager.registerChange(i1);
-		undoManager.registerChange(i2);
-		undoManager.registerChange(i3);
-
 		i1.apply(doc);
+		undoManager.registerChange(i2);
 		i2.apply(doc);
+		undoManager.registerChange(i3);
 		i3.apply(doc);
 
 		// 2 Undo
@@ -218,7 +201,6 @@ public class UndoManagerTest extends TestCase {
 
 		// Now add another change
 		undoManager.registerChange(i4);
-
 		i4.apply(doc);
 		// Now we should have last change C4 at the beginning and C1 (first
 		// change)

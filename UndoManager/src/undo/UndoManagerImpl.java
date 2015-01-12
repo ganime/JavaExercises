@@ -4,10 +4,10 @@ import java.util.LinkedList;
 
 public class UndoManagerImpl implements UndoManager {
 
-	LinkedList<Change> undoRedoBuffer = new LinkedList<Change>();
-	private int bufferCapacity;
-
-	private Document doc;
+	// it might be better to put the undoRedoBuffer in its on class.
+	private final LinkedList<Change> undoRedoBuffer = new LinkedList<Change>();
+	private final int bufferCapacity;
+	private final Document doc;
 	int pointer = 0;
 
 	public UndoManagerImpl(Document doc, int bufferSize) {

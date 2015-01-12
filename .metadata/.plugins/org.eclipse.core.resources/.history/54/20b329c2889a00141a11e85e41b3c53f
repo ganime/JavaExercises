@@ -1,0 +1,41 @@
+package undo;
+
+public class Insertion implements Change {
+	private final int pos;
+	private final String s;
+	private final int oldDot;
+	private final int newDot;
+	private final UndoManager undoManager;
+
+	public Insertion(int pos, String s, int oldDot, int newDot, UndoManager undoManager) {
+		this.pos = pos;
+		this.s = s;
+		this.oldDot = oldDot;
+		this.newDot = newDot;
+		this.undoManager = undoManager;
+	}
+
+	@Override
+	public String getType() {
+		return "Insert";
+	}
+
+	@Override
+	public void apply(Document doc) {
+		doc.insert(pos, s);
+		undoManager.registerChange(this);
+		doc.setDot(this.newDot);
+	}
+
+	@Override
+	public void revert(Document doc) {
+		doc.delete(pos, s);
+		doc.setDot(this.oldDot);
+	}
+
+	@Override
+	public String toString() {
+		return this.getType() + ": \"" + s + "\"";
+	}
+
+}

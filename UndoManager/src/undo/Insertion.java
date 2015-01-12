@@ -1,10 +1,10 @@
 package undo;
 
 public class Insertion implements Change {
-	private int pos;
-	private String s;
-	private int oldDot;
-	private int newDot;
+	private final int pos;
+	private final String s;
+	private final int oldDot;
+	private final int newDot;
 
 	public Insertion(int pos, String s, int oldDot, int newDot) {
 		this.pos = pos;
