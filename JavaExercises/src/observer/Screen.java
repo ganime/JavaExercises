@@ -1,0 +1,18 @@
+package observer;
+
+import java.util.Observable;
+import java.util.Observer;
+
+public class Screen implements Observer {
+	String name;
+	public Screen(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void update(Observable obj, Object arg1) {
+		DataStore ds = (DataStore)obj;
+		System.out.println("Data changed on screen " + name + " to :" + (String)arg1);
+	}
+
+}
