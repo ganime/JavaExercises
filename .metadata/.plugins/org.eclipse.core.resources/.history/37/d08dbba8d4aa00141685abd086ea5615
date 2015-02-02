@@ -1,0 +1,13 @@
+
+public class ShoppingCart {
+	private PaymentStrategy paymentStrategy = null;
+
+	public PaymentStrategy getPaymentStrategy() {
+		return paymentStrategy;
+	}
+
+	public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
+		this.paymentStrategy = paymentStrategy;
+	}
+
+}

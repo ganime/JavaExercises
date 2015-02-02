@@ -1,0 +1,18 @@
+package visitor;
+
+public class DomesticShipper implements Shipper {
+	double totalPandP = 0;
+
+	@Override
+	public void ship(Book book) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void ship(Film cd) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

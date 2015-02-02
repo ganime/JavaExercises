@@ -1,0 +1,6 @@
+package visitor;
+
+public interface Shipper {
+	public ship(Book book);
+	public ship(CD cd);
+}

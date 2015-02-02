@@ -1,0 +1,10 @@
+package adapter;
+
+public class SortListAdapter implements Sorter {
+
+	@Override
+	public int[] sort(int[] numberArray) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

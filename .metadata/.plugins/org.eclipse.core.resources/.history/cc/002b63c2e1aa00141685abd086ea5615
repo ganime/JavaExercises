@@ -1,0 +1,14 @@
+package adapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class NumberSorter{
+	public List<Integer> sort (List<Integer> numbers) {
+		ArrayList<Integer> nos = new ArrayList<Integer>(numbers.size());
+		
+		Collections.copy(dest, src)(nos, numbers);
+		return nos;
+	}
+}

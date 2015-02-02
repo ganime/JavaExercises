@@ -1,0 +1,9 @@
+package visitor;
+
+public class Film implements Shippable {
+
+	@Override
+	public void send(Shipper shipper) {
+		shipper.ship(this);
+	}
+}

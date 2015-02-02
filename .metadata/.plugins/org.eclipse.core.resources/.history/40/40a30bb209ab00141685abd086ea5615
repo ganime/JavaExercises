@@ -1,0 +1,11 @@
+package visitor;
+
+public class Book implements PostableItem {
+
+	@Override
+	public void send(Shipper shipper) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

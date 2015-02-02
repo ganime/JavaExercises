@@ -1,0 +1,19 @@
+package test.adapter;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import junit.framework.TestCase;
+
+public class VisitorTest extends TestCase {	
+	
+	@Before
+	public void setUp() throws Exception {
+	}
+	
+	@Test
+	public void testBook() {
+		// TODO Auto-generated method stub
+
+	}
+}

@@ -1,0 +1,29 @@
+package strategy;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import visitor.DomesticShipper;
+import visitor.Item;
+import visitor.Shippable;
+
+public class ShoppingCart {
+	List<Item> items = new ArrayList<Item>();
+	
+	int amount = 100;
+	public void pay(PaymentStrategy paymentStrategy) {
+		paymentStrategy.pay(amount);
+	}
+
+	public void addItem(Item item) {
+		items.add(item);
+	}
+	
+	public double calculatePostage() {
+		DomesticShipper shipper = new DomesticShipper();
+		for(Item item: items) {
+			item.send(shipper); 
+		}
+		return shipper.getTotalPandP();
+	}
+}

@@ -1,0 +1,13 @@
+
+public class CreditCardPayment implements PaymentStrategy {
+	private final String creditCardNo;
+	private final int expiryDateMonth;
+	private final int expiryDateYear;
+	private final int cvvCode;
+	@Override
+	public void pay(int amount) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

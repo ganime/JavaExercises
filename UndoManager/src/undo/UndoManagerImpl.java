@@ -25,6 +25,12 @@ public class UndoManagerImpl implements UndoManager {
 		return undoRedoBuffer.size();
 	}
 
+	/** When implemented in accordance to the comment below:
+	 * "Registers a new change in this undo manager. If the buffer size of the
+	 * undo manager is filled, replace the oldest change with the one provided
+	 * to this method"
+	 * undoRedoBuffer does not work properly. Hence, I changed it slightly.
+	 */
 	@Override
 	public void registerChange(Change change) {
 		// If we have made undo - redo operations before, we flush the buffer

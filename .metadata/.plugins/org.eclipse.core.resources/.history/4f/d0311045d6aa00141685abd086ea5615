@@ -1,0 +1,35 @@
+package test.strategy;
+
+import static org.junit.Assert.*;
+import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import strategy.CreditCardPayment;
+import strategy.PayPalPayment;
+import strategy.PaymentStrategy;
+import strategy.ShoppingCart;
+
+public class StrategyTest extends TestCase{
+
+	ShoppingCart cart;
+
+	@Before
+	public void setUp() throws Exception {
+		cart = new ShoppingCart();
+	}
+
+	@Test
+	public void testPayCreditCard() {
+		PaymentStrategy strategy = new CreditCardPayment("4444444444444444", 12, 2016, 122);
+		cart.pay(strategy);	
+	}
+	
+	@Test
+	public void testPayPal() {
+		PaymentStrategy strategy = new CreditCardPayment("4444444444444444", 12, 2016, 122);
+		cart.pay(strategy);	
+	}
+
+}

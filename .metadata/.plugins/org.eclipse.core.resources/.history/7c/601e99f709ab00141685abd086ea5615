@@ -1,0 +1,9 @@
+package strategy;
+
+public class ShoppingCart {
+	int amount = 100;
+	public void pay(PaymentStrategy paymentStrategy) {
+		paymentStrategy.pay(amount);
+	}
+
+}

@@ -1,0 +1,12 @@
+
+public class PayPalPayment implements PaymentStrategy{
+	private final String paypalUsername;
+	private final String paypalPassword;
+
+	@Override
+	public void pay(int amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

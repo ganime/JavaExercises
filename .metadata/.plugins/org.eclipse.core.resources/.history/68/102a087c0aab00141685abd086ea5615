@@ -1,0 +1,16 @@
+package visitor;
+
+public abstract class Item {
+	private String name;
+	public Item(String name, double price) {
+		super();
+		this.name = name;
+		this.price = price;
+	}
+	private double price;
+	
+	public String getName() {
+		return name;
+	}
+	
+}

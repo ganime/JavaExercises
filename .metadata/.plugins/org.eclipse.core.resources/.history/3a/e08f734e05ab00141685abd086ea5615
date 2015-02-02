@@ -1,0 +1,23 @@
+
+public class EllipsisExample {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String[] generalConcatAll(String...strings) {
+
+	    StringBuilder sb = new StringBuilder();
+
+	    for(String array : strings) {
+	         sb.append(array);
+	    }
+
+	    return sb.toString();
+
+	}
+}

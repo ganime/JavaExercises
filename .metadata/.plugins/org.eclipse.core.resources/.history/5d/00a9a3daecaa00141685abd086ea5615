@@ -1,0 +1,8 @@
+package observer;
+
+import java.util.Observable;
+
+public class DataStore extends Observable {
+	private String data;
+
+}

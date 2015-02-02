@@ -1,0 +1,21 @@
+package adapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import strategy.SortingStrategy;
+
+public class NumberSorter{
+	public List<Integer> sort (List<Integer> numbers) {
+		ArrayList<Integer> nos = new ArrayList<Integer>(numbers);
+		
+		Collections.copy(nos, numbers);
+		Collections.sort(nos);
+		return nos;
+	}
+	
+	private void sort (SortingStrategy sortingStrategy, List<Integer> list) {
+		sortingStrategy.sort(list);
+	}
+}

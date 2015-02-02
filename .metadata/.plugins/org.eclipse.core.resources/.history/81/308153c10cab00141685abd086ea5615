@@ -1,0 +1,16 @@
+package strategy;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import visitor.Shippable;
+
+public class ShoppingCart {
+	List<Shippable> items = new ArrayList<Shippable>();
+	
+	int amount = 100;
+	public void pay(PaymentStrategy paymentStrategy) {
+		paymentStrategy.pay(amount);
+	}
+
+}

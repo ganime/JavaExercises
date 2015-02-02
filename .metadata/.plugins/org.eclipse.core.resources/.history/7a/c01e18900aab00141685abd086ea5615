@@ -1,0 +1,9 @@
+package visitor;
+
+public class Book implements Postable {
+
+	@Override
+	public void send(Shipper shipper) {
+		shipper.ship(this);
+	}
+}

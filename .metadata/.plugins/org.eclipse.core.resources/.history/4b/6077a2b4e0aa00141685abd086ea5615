@@ -1,0 +1,20 @@
+package test.adapter;
+
+import org.junit.Test;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
+
+import adapter.SortListAdapter;
+import adapter.Sorter;
+
+public class AdapterTest extends TestCase {
+	int[] numbers = {3,1,7,5,8};
+	
+	@Test
+	public void testAdapter() {
+		Sorter sorter = new SortListAdapter();
+		int[] arr = sorter.sort(numbers);
+		assertEquals(0, arr[0])
+	}
+}

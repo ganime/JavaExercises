@@ -1,0 +1,25 @@
+package adapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class SortListAdapter implements Sorter {
+
+	@Override
+	public int[] sort(int[] arr) {
+		ArrayList<Integer> numbersAsList = new ArrayList<Integer>(arr.length);
+		for(int i=0; i< arr.length; i++) {
+			numbersAsList.add(arr[i]);
+		}
+		NumberSorter sorter = new NumberSorter();
+		sorter.sort(numbersAsList);
+		
+		int[] returnArr = new int[numbersAsList.size()];
+		int i=0;
+		for(Integer number: numbersAsList) {
+			returnArr[i++] = number;
+		}
+		return returnArr;
+	}
+}
